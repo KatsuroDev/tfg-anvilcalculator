@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld />
+  <AnvilCalculator />
 </template>
 
 <script lang="ts" setup>

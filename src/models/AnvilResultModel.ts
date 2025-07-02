@@ -6,18 +6,27 @@ export default class AnvilResultModel {
   material: String;
   steps: Array<number>;
 
-  constructor(model: MaterialCreateModel) {
-    this.material = model.material!;
-    this.steps = this.CalculateSteps(model.target!, model.lastSteps);
+  constructor(model: MaterialCreateModel | undefined, material: String | undefined = undefined, steps: Array<number> | undefined = undefined) {
+    if (model === undefined)
+    {
+      this.material = material!;
+      this.steps = steps!;
+    }
+    else
+    {
+      this.material = model!.material!;
+      this.steps = this.CalculateSteps(model!.target!, model!.lastSteps);
+    }
   }
 
   CalculateSteps(target: number, lastSteps: Array<number>) {
     let targetBeforeLastSteps =
-      target +
-      lastSteps.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0,
-      );
+      target -
+      lastSteps.reduce((previous, currentValue) => {
+        if (currentValue === null || previous === null)
+          return 0;
+        return previous + currentValue;
+      }, 0);
 
     const shrinkTime = Math.floor(targetBeforeLastSteps / 16);
     targetBeforeLastSteps -= shrinkTime * 16;
@@ -48,9 +57,6 @@ export default class AnvilResultModel {
       steps.push(2);
     }
 
-    console.log(targetBeforeLastSteps);
-    console.log(TechniqueMapper[1]);
-
     if (targetBeforeLastSteps == 1) {
       steps = steps.concat(TechniqueMapper[1]);
     }
@@ -58,5 +64,10 @@ export default class AnvilResultModel {
     steps = steps.concat(lastSteps);
 
     return steps;
+  }
+
+  static fromJson(obj: any)
+  {
+    return new AnvilResultModel(undefined, obj.material, obj.steps);
   }
 }

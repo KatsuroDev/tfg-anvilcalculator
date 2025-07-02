@@ -55,28 +55,47 @@
         </v-col>
 
         <v-col cols="1">
-          <v-btn icon="mdi-plus" @click="CreateResult" />
+          <v-btn icon="mdi-plus" @click="CreateResult"/>
         </v-col>
       </v-row>
 
       <v-row v-for="result in results">
-        <AnvilResult :model="result" />
+        <AnvilResult :model="result" @delete-result="(deletedResult) => DeleteResult(deletedResult)" />
       </v-row>
     </div>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import MaterialCreateModel from "@/models/MaterialCreateModel";
-import AnvilResultModel from "@/models/AnvilResultModel";
-import Techniques from "@/models/Techniques.ts";
+import { onMounted, reactive, ref } from "vue";
 import AnvilResult from "./AnvilResult.vue";
+import AnvilResultModel from "@/models/AnvilResultModel";
+import AnvilResultRepository from "@/repositories/AnvilResult.repository";
+import MaterialCreateModel from "@/models/MaterialCreateModel";
+import Techniques from "@/models/Techniques.ts";
 
 const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());
 
+onMounted(() => {
+	GetResults();
+});
+
 function CreateResult() {
-  results.value.push(new AnvilResultModel(model));
+	const newResult = new AnvilResultModel(model);
+	AnvilResultRepository.Save(newResult);
+	results.value.push(newResult);
 }
+
+function DeleteResult(deletedResult: AnvilResultModel) {
+	AnvilResultRepository.Delete(deletedResult);
+	const index = results.value.findIndex((item: AnvilResultModel) => item === deletedResult);
+	results.value.splice(index, 1);
+}
+
+function GetResults()
+{
+	results.value = AnvilResultRepository.GetAll()!;
+}
+
 </script>

@@ -1,21 +1,25 @@
 <template>
   <v-card class="w-100 py-4 my-2">
-    <v-container>
-      <v-row>
-        <v-col cols="3">
+      <v-row class="px-8">
+        <v-col cols="3" class="d-flex align-center">
           <h2 class="text-h6">{{ model.material }}</h2>
         </v-col>
 
-        <v-col cols="9">
+        <v-col cols="8" class="d-flex align-center">
           <p>{{ stepsDisplay }}</p>
         </v-col>
+
+        <v-spacer />
+
+        <v-col class="d-flex align-center justify-center">
+          <v-btn color="error" icon="mdi-trash-can-outline" @click="onDeleteClick()"/>
+        </v-col>
       </v-row>
-    </v-container>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import AnvilResultModel from "@/models/AnvilResultModel";
 
 const props = defineProps({
@@ -24,6 +28,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(['delete-result']);
 
 const stepsDisplay = ref("");
 
@@ -50,6 +56,9 @@ props.model.steps.forEach((step, index) => {
   }
 });
 
-console.log(props.model);
-console.log(times);
+function onDeleteClick()
+{
+  emit('delete-result', self);
+}
+
 </script>

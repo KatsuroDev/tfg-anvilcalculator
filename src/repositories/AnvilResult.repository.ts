@@ -17,7 +17,7 @@ class AnvilResultRepository {
     localStorage.setItem("anvil-results", JSON.stringify(results));
   }
 
-  Delete(model: AnvilResultModel)
+  Delete(uuid: string)
   {
     let rawResults = localStorage.getItem("anvil-results");
     let results = new Array<AnvilResultModel>();
@@ -28,7 +28,7 @@ class AnvilResultRepository {
     const parsed = JSON.parse(rawResults!);
     results = parsed.map((obj: any) => AnvilResultModel.fromJson(obj));
 
-    const index = results.findIndex((item: AnvilResultModel) => item === model);
+    const index = results.findIndex((item: AnvilResultModel) => item.uuid === uuid);
 	  results.splice(index, 1);
 
     localStorage.setItem("anvil-results", JSON.stringify(results));

@@ -59,7 +59,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-for="result in results">
+      <v-row v-for="result in results" :key="result.uuid">
         <AnvilResult :model="result" @delete-result="(deletedResult) => DeleteResult(deletedResult)" />
       </v-row>
     </div>
@@ -87,9 +87,9 @@ function CreateResult() {
 	results.value.push(newResult);
 }
 
-function DeleteResult(deletedResult: AnvilResultModel) {
-	AnvilResultRepository.Delete(deletedResult);
-	const index = results.value.findIndex((item: AnvilResultModel) => item === deletedResult);
+function DeleteResult(uuid: string) {
+	AnvilResultRepository.Delete(uuid);
+	const index = results.value.findIndex((item: AnvilResultModel) => item.uuid === uuid);
 	results.value.splice(index, 1);
 }
 

@@ -1,5 +1,5 @@
 export default class MaterialCreate {
-  material?: String;
+  material?: string;
   target?: number;
   lastSteps: Array<number> = [];
 }

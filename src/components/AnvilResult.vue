@@ -58,7 +58,7 @@ props.model.steps.forEach((step, index) => {
 
 function onDeleteClick()
 {
-  emit('delete-result', self);
+  emit('delete-result', props.model.uuid);
 }
 
 </script>

@@ -1,12 +1,13 @@
 import MaterialCreateModel from "./MaterialCreateModel";
-import Techniques from "./Techniques";
 import TechniqueMapper from "./TechniqueMapper";
+import {v4 as uuidv4} from 'uuid';
 
 export default class AnvilResultModel {
-  material: String;
+  uuid: string = uuidv4();
+  material: string;
   steps: Array<number>;
 
-  constructor(model: MaterialCreateModel | undefined, material: String | undefined = undefined, steps: Array<number> | undefined = undefined) {
+  constructor(model: MaterialCreateModel | undefined, material: string | undefined = undefined, steps: Array<number> | undefined = undefined) {
     if (model === undefined)
     {
       this.material = material!;

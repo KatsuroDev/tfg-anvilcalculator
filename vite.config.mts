@@ -12,6 +12,9 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/tfg-anvilcalculator/",
+  build: {
+    sourcemap: true
+  },
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',

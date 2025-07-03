@@ -59,7 +59,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-for="result in results.slice().reverse()" :key="result.uuid">
+      <v-row v-for="result in reversedResults" :key="result.uuid">
         <AnvilResult :model="result" @delete-result="(deletedResult) => DeleteResult(deletedResult)" />
       </v-row>
     </div>
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import AnvilResult from "./AnvilResult.vue";
 import AnvilResultModel from "@/models/AnvilResultModel";
 import AnvilResultRepository from "@/repositories/AnvilResult.repository";
@@ -76,6 +76,8 @@ import Techniques from "@/models/Techniques.ts";
 
 const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());
+
+const reversedResults = computed(() => results.value.slice().reverse());
 
 onMounted(() => {
 	GetResults();

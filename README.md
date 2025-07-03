@@ -10,13 +10,13 @@
 
 <p align="center">
 	<a href="https://github.com/KatsuroDev/tfg-anvilcalculator/blob/main/LICENSE.md">
-		<img src="https://img.shield.io/github/license/katsurodev/tfg-anvilcalculator">
+		<img src="https://img.shield.io/github/license/KatsuroDev/tfg-anvilcalculator">
 	</a>
 </p>
 
 <p align="center">
 	<a href="https://github.com/KatsuroDev/tfg-anvilcalculator/blob/main/LICENSE.md">
-		<img src="https://img.shield.io/github/package-json/v/katsurodev/tfg-anvilcalculator">
+		<img src="https://img.shield.io/github/package-json/v/KatsuroDev/tfg-anvilcalculator">
 	</a>
 </p>
 

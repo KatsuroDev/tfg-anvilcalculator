@@ -77,7 +77,7 @@ import Techniques from "@/models/Techniques.ts";
 const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());
 
-const reversedResults = computed(() => results.value.slice().reverse());
+const reversedResults = computed(() => (results.value ?? []).slice().reverse());
 
 onMounted(() => {
 	GetResults();

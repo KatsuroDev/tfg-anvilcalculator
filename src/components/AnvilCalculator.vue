@@ -59,7 +59,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-for="result in results" :key="result.uuid">
+      <v-row v-for="result in results.slice().reverse()" :key="result.uuid">
         <AnvilResult :model="result" @delete-result="(deletedResult) => DeleteResult(deletedResult)" />
       </v-row>
     </div>

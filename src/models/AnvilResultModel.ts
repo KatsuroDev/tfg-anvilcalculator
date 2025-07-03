@@ -63,7 +63,7 @@ export default class AnvilResultModel {
       steps = steps.concat(TechniqueMapper[1]);
     }
 
-    steps = steps.concat(lastSteps.filter(item => item != null));
+    steps = steps.concat(lastSteps.filter(item => item != null).reverse());
 
     return steps;
   }

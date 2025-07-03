@@ -10,14 +10,18 @@
 
 <p align="center">
 	<a href="https://github.com/KatsuroDev/tfg-anvilcalculator/blob/main/LICENSE.md">
-		<img src="https://img.shield.io/github/license/KatsuroDev/tfg-anvilcalculator">
+		<img src="https://img.shields.io/github/license/KatsuroDev/tfg-anvilcalculator?color=97C50F">
+	</a>
+	<a href="https://github.com/KatsuroDev/tfg-anvilcalculator/blob/main/LICENSE.md">
+		<img src="https://img.shields.io/github/package-json/v/KatsuroDev/tfg-anvilcalculator?color=B616CC">
 	</a>
 </p>
 
 <p align="center">
-	<a href="https://github.com/KatsuroDev/tfg-anvilcalculator/blob/main/LICENSE.md">
-		<img src="https://img.shield.io/github/package-json/v/KatsuroDev/tfg-anvilcalculator">
+	<a href="https://katsurodev.github.io/tfg-anvilcalculator/">
+		<img src="https://img.shields.io/badge/GitHub%20Pages-181717?logo=github">
 	</a>
+
 </p>
 
 # TFG Anvil Calculator

@@ -8,7 +8,7 @@ export default class AnvilResultModel {
   steps: Array<number>;
 
   constructor(model: MaterialCreateModel | undefined, material: string | undefined = undefined, steps: Array<number> | undefined = undefined) {
-    if (model === undefined)
+    if (model == undefined)
     {
       this.material = material!;
       this.steps = steps!;
@@ -24,8 +24,9 @@ export default class AnvilResultModel {
     let targetBeforeLastSteps =
       target -
       lastSteps.reduce((previous, currentValue) => {
-        if (currentValue === null || previous === null)
-          return 0;
+        if (currentValue == null)
+          return previous;
+
         return previous + currentValue;
       }, 0);
 
@@ -62,7 +63,7 @@ export default class AnvilResultModel {
       steps = steps.concat(TechniqueMapper[1]);
     }
 
-    steps = steps.concat(lastSteps);
+    steps = steps.concat(lastSteps.filter(item => item != null));
 
     return steps;
   }

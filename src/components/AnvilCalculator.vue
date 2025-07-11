@@ -97,7 +97,9 @@ function DeleteResult(uuid: string) {
 
 function GetResults()
 {
-	results.value = AnvilResultRepository.GetAll()!;
+	const savedResults = AnvilResultRepository.GetAll();
+	if (savedResults != null)
+		results.value = savedResults;
 }
 
 </script>

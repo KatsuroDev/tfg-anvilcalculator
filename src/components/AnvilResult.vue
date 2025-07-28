@@ -56,7 +56,8 @@ const emit = defineEmits(['delete-result']);
 
 const stepCounts = ref(new Map<number, number>);
 const lastStepCounts = ref<Array<{value: number, times: number}>>([]);
-const steps = props.model.steps.slice(0, -(props.model.lastSteps.length))
+const lastSteps = props.model.lastSteps.filter(x => x != undefined).reverse();
+const steps = props.model.steps.slice(0, -(props.model.lastSteps.length));
 let times = 0;
 
 steps.forEach((step, index) => {
@@ -79,7 +80,6 @@ steps.forEach((step, index) => {
   }
 });
 
-const lastSteps = props.model.lastSteps.reverse();
 let lastTimes = 0;
 lastSteps.forEach((step, index) => {
 

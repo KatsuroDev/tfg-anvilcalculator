@@ -27,22 +27,76 @@
           />
         </v-col>
 
-        <v-col cols="2">
+		<v-col cols="2">
           <v-select
             v-model="model.lastSteps[0]"
             label="Last step"
             :items="Techniques"
+			item-value="value"
             clearable
-          />
+          >
+			<template #item="{ item, props }">
+				<v-list-item
+					:value="props.value"
+					@click="props.onClick!"
+					class="d-flex align-center"
+				>
+					<v-avatar size="48" class="mr-2" rounded="0">
+						<v-img :src="getImage(item.raw.name)" class="pixel-art" />
+					</v-avatar>
+					<span class="text-subtitle-1">
+						{{ item.raw.name }}
+					</span>
+				</v-list-item>
+			</template>
+
+			<template #selection="{ item }">
+				<div class="d-flex align-center">
+					<v-avatar size="24" class="mr-2" rounded="0">
+						<v-img :src="getImage(item.raw.name)" class="pixel-art"/>
+					</v-avatar>
+					<span>
+						{{ item.raw.name }}
+					</span>
+				</div>
+			</template>
+		  </v-select>
         </v-col>
 
-        <v-col cols="2">
+		<v-col cols="2">
           <v-select
             v-model="model.lastSteps[1]"
             label="Second-to-last step"
             :items="Techniques"
+			item-value="value"
             clearable
-          />
+          >
+			<template #item="{ item, props }">
+				<v-list-item
+					:value="props.value"
+					@click="props.onClick!"
+					class="d-flex align-center"
+				>
+					<v-avatar size="48" class="mr-2" rounded="0">
+						<v-img :src="getImage(item.raw.name)" class="pixel-art"/>
+					</v-avatar>
+					<span class="text-subtitle-1">
+						{{ item.raw.name }}
+					</span>
+				</v-list-item>
+			</template>
+
+			<template #selection="{ item }">
+				<div class="d-flex align-center">
+					<v-avatar size="24" class="mr-2" rounded="0">
+						<v-img :src="getImage(item.raw.name)" class="pixel-art"/>
+					</v-avatar>
+					<span>
+						{{ item.raw.name }}
+					</span>
+				</div>
+			</template>
+		  </v-select>
         </v-col>
 
         <v-col cols="2">
@@ -50,8 +104,35 @@
             v-model="model.lastSteps[2]"
             label="Third-to-last step"
             :items="Techniques"
+			item-value="value"
             clearable
-          />
+          >
+			<template #item="{ item, props }">
+				<v-list-item
+					:value="props.value"
+					@click="props.onClick!"
+					class="d-flex align-center"
+				>
+					<v-avatar size="48" class="mr-2" rounded="0">
+						<v-img :src="getImage(item.raw.name)" class="pixel-art"/>
+					</v-avatar>
+					<span class="text-subtitle-1">
+						{{ item.raw.name }}
+					</span>
+				</v-list-item>
+			</template>
+
+			<template #selection="{ item }">
+				<div class="d-flex align-center">
+					<v-avatar size="24" class="mr-2" rounded="0">
+						<v-img :src="getImage(item.raw.name)" class="pixel-art"/>
+					</v-avatar>
+					<span>
+						{{ item.raw.name }}
+					</span>
+				</div>
+			</template>
+		  </v-select>
         </v-col>
 
         <v-col cols="1">
@@ -73,6 +154,13 @@ import AnvilResultModel from "@/models/AnvilResultModel";
 import AnvilResultRepository from "@/repositories/AnvilResult.repository";
 import MaterialCreateModel from "@/models/MaterialCreateModel";
 import Techniques from "@/models/Techniques.ts";
+
+const images = import.meta.glob('@/assets/techniques/*.png', { eager: true, import: 'default' }) as Record<string, string>;
+
+function getImage(name: string): string {
+  const key = `/src/assets/techniques/${name.toLowerCase().replace(' ', '_')}.png`;
+  return images[key] || '';
+}
 
 const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());

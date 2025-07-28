@@ -8,3 +8,9 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+.pixel-art > img {
+	image-rendering: auto; 
+	image-rendering: crisp-edges; 
+	image-rendering: pixelated;
+}

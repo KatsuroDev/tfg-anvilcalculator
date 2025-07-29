@@ -9,15 +9,14 @@
         </v-col>
 
         <v-col cols="8" class="d-flex align-center">
-          <div v-for="[value, times] in stepCountsEntries" class="d-flex align-center">
-            <span class="text-h5">{{ times }}x </span>
+          <div v-for="[value, times] in stepCountsEntries" class="d-flex align-center mr-3">
+            <span class="text-h5 font-weight-medium mr-1">{{ times }}x </span>
             <v-avatar size="48" class="mr-2" rounded="0">
 						  <v-img :src="getImage(Techniques.find(x => x.value === value)!.name)" class="pixel-art"/>
 					  </v-avatar>
           </div>
-          <p class="text-h5 font-weight-medium mr-2" v-if="lastStepCountsEntries.length !== 0">Then</p>
-          <div v-for="step in lastStepCountsEntries" class="d-flex align-center">
-            <span class="text-h5">{{ step.times }}x </span>
+          <div v-for="step in lastStepCountsEntries" class="d-flex align-center mr-3">
+            <span class="text-h5 font-weight-medium mr-1">{{ step.times }}x </span>
             <v-avatar size="48" class="mr-2" rounded="0">
 						  <v-img :src="getImage(Techniques.find(x => x.value === step.value)!.name)" class="pixel-art"/>
 					  </v-avatar>

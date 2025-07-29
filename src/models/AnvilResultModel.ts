@@ -6,7 +6,7 @@ export default class AnvilResultModel {
   uuid: string = uuidv4();
   material: string;
   steps: Array<number>;
-  lastSteps: Array<number>;
+  lastSteps: Array<number | undefined>;
 
   constructor(model: MaterialCreateModel | undefined,
               material: string | undefined = undefined,
@@ -21,20 +21,24 @@ export default class AnvilResultModel {
     else
     {
       this.material = model!.material!;
-      this.steps = this.CalculateSteps(model!.target!, model!.lastSteps);
+      this.steps = this.calculateSteps(model!.target!, model!.lastSteps);
       this.lastSteps = model!.lastSteps;
     }
   }
 
-  CalculateSteps(target: number, lastSteps: Array<number>) {
-    let targetBeforeLastSteps =
-      target -
-      lastSteps.reduce((previous, currentValue) => {
-        if (currentValue == null)
+  calculateSteps(target: number, lastSteps: Array<number | undefined>) {
+
+    const lastStepsTotal = lastSteps.reduce((previous, currentValue) => {
+        if (previous == undefined)
+          return;
+        if (currentValue == undefined)
           return previous;
 
         return previous + currentValue;
       }, 0);
+
+    let targetBeforeLastSteps =
+      target - (lastStepsTotal != undefined ? lastStepsTotal : 0);
 
     const shrinkTime = Math.floor(targetBeforeLastSteps / 16);
     targetBeforeLastSteps -= shrinkTime * 16;

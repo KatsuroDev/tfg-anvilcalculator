@@ -1,5 +1,8 @@
 <template>
-  <v-card class="w-100 py-4 my-2">
+  <v-card @click="onCardClick()"
+          link
+          :class="['w-100', 'py-4', 'my-2', {'bg-grey-darken-2': props.isSelected}]"
+          >
       <v-row class="px-8">
         <v-col cols="3" class="d-flex align-center">
           <h2 class="text-h6">{{ model.material }}</h2>
@@ -12,7 +15,7 @@
 						  <v-img :src="getImage(Techniques.find(x => x.value === value)!.name)" class="pixel-art"/>
 					  </v-avatar>
           </div>
-          <p class="text-h5 font-weight-medium mr-2">Then</p>
+          <p class="text-h5 font-weight-medium mr-2" v-if="lastStepCountsEntries.length !== 0">Then</p>
           <div v-for="step in lastStepCountsEntries" class="d-flex align-center">
             <span class="text-h5">{{ step.times }}x </span>
             <v-avatar size="48" class="mr-2" rounded="0">
@@ -40,6 +43,10 @@ const props = defineProps({
     type: AnvilResultModel,
     required: true,
   },
+  isSelected: {
+    type: Boolean,
+    required: false,
+  }
 });
 
 const stepCountsEntries = computed(() => Array.from(stepCounts.value.entries()));
@@ -52,27 +59,30 @@ function getImage(name: string): string {
   return images[key] || '';
 }
 
-const emit = defineEmits(['delete-result']);
+const emit = defineEmits(['delete-result', 'select-result']);
 
 const stepCounts = ref(new Map<number, number>);
 const lastStepCounts = ref<Array<{value: number, times: number}>>([]);
 const lastSteps = props.model.lastSteps.filter(x => x != undefined).reverse();
-const steps = props.model.steps.slice(0, -(props.model.lastSteps.length));
+
+const lastIndexTrim = props.model.lastSteps.length !== 0 ? -(props.model.lastSteps.length) : undefined;
+const steps = props.model.steps.slice(0, lastIndexTrim);
 let times = 0;
 
 steps.forEach((step, index) => {
-  if (index === 0) {
-    times++;
-    return;
+
+  if (index !== 0)
+  {
+    const previous = props.model.steps[index - 1];
+
+    if (step === previous) times++;
+    else {
+      stepCounts.value.set(previous, times);
+      times = 1;
+    }
   }
 
-  const previous = props.model.steps[index - 1];
-
-  if (step === previous) times++;
-  else {
-    stepCounts.value.set(previous, times);
-    times = 1;
-  }
+  times++;
 
   if (steps.length === index + 1) {
     stepCounts.value.set(step, times);
@@ -83,24 +93,28 @@ steps.forEach((step, index) => {
 let lastTimes = 0;
 lastSteps.forEach((step, index) => {
 
-  if (index === 0) {
-    lastTimes++
-    return;
+  if (index !== 0) {
+    const previous = lastSteps[index - 1];
+
+    if (step === previous) lastTimes++;
+    else {
+      lastStepCounts.value.push({ value: previous, times: lastTimes });
+      lastTimes = 1;
+    }
   }
 
-  const previous = lastSteps[index - 1];
-
-  if (step === previous) lastTimes++;
-  else {
-    lastStepCounts.value.push({ value: previous, times: lastTimes });
-    lastTimes = 1;
-  }
+  lastTimes++;
 
   if (lastSteps.length === index + 1) {
     lastStepCounts.value.push({ value: step, times: lastTimes });
     lastTimes = 0;
   }
 });
+
+function onCardClick()
+{
+  emit('select-result', props.model.uuid);
+}
 
 function onDeleteClick()
 {

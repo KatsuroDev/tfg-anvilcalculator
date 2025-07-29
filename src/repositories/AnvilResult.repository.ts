@@ -1,7 +1,7 @@
 import AnvilResultModel from "@/models/AnvilResultModel";
 
 class AnvilResultRepository {
-  Save(model: AnvilResultModel)
+  save(model: AnvilResultModel)
   {
     let rawResults = localStorage.getItem("anvil-results");
     let results = new Array<AnvilResultModel>();
@@ -17,7 +17,7 @@ class AnvilResultRepository {
     localStorage.setItem("anvil-results", JSON.stringify(results));
   }
 
-  Delete(uuid: string)
+  delete(uuid: string)
   {
     let rawResults = localStorage.getItem("anvil-results");
     let results = new Array<AnvilResultModel>();
@@ -34,7 +34,7 @@ class AnvilResultRepository {
     localStorage.setItem("anvil-results", JSON.stringify(results));
   }
 
-  GetAll()
+  getAll()
   {
     let rawResults = localStorage.getItem("anvil-results");
     let results = new Array<AnvilResultModel>();

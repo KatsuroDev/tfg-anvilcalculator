@@ -3,7 +3,7 @@
     <div class="w-100">
       <v-row>
         <v-col cols="12">
-          <v-img class="mb-4" height="200" src="@/assets/tfg-logo.png" />
+          <v-img class="mb-4" height="100" src="@/assets/tfg-logo.png" />
         </v-col>
         <v-col cols="12">
           <div class="mb-8 text-center">
@@ -136,19 +136,22 @@
         </v-col>
 
         <v-col cols="1">
-          <v-btn icon="mdi-plus" @click="CreateResult"/>
+          <v-btn icon="mdi-plus" @click="createResult"/>
         </v-col>
       </v-row>
-
-      <v-row v-for="result in reversedResults" :key="result.uuid">
-        <AnvilResult :model="result" @delete-result="(deletedResult) => DeleteResult(deletedResult)" />
+      <v-row v-for="result in displayResults" :key="result.model.uuid">
+        <AnvilResult :model="result.model"
+					 :is-selected="result.selected"
+					 @delete-result="(deletedResult) => deleteResult(deletedResult)" 
+					 @select-result="(selectedResult) => selectResult(selectedResult)" 
+					 />
       </v-row>
     </div>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import AnvilResult from "./AnvilResult.vue";
 import AnvilResultModel from "@/models/AnvilResultModel";
 import AnvilResultRepository from "@/repositories/AnvilResult.repository";
@@ -165,29 +168,61 @@ function getImage(name: string): string {
 const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());
 
-const reversedResults = computed(() => (results.value ?? []).slice().reverse());
+const displayResults = ref<Array<{model: AnvilResultModel, selected: boolean }>>([]);
+	
+watch(results, (newResults) => {
+	if (!newResults) return;
+
+	const sorted = newResults
+		.slice()
+		.sort((a, b) => a.material.toUpperCase().localeCompare(b.material.toUpperCase()));
+
+	displayResults.value = sorted.map(x => ({
+		model: x,
+		selected: false
+
+	}));
+}, { immediate: true });
 
 onMounted(() => {
-	GetResults();
+	getResults();
 });
 
-function CreateResult() {
-	const newResult = new AnvilResultModel(model);
-	AnvilResultRepository.Save(newResult);
-	results.value.push(newResult);
+function modelReset() {
+	model.lastSteps = [undefined, undefined, undefined];
+	model.material = undefined;
+	model.target = undefined;
 }
 
-function DeleteResult(uuid: string) {
-	AnvilResultRepository.Delete(uuid);
+function createResult() {
+	const newResult = new AnvilResultModel(model);
+	AnvilResultRepository.save(newResult);
+	results.value.push(newResult);
+	modelReset();
+}
+
+function deleteResult(uuid: string) {
+	AnvilResultRepository.delete(uuid);
 	const index = results.value.findIndex((item: AnvilResultModel) => item.uuid === uuid);
 	results.value.splice(index, 1);
 }
 
-function GetResults()
+function getResults()
 {
-	const savedResults = AnvilResultRepository.GetAll();
+	const savedResults = AnvilResultRepository.getAll();
 	if (savedResults != null)
 		results.value = savedResults;
+}
+
+function selectResult(uuid: string) {
+	displayResults.value.forEach(x => {
+		if (x.model.uuid === uuid)
+		{
+			x.selected = !x.selected;
+			return;
+		}
+		x.selected = false;
+	});
 }
 
 </script>

@@ -153,7 +153,7 @@
 		<hr />
 	  </div>
 
-	  <v-row class="w-33">
+	  <v-row class="w-33" v-if="results.length > 0">
 		<v-text-field
 			append-inner-icon="mdi-magnify"
 			density="compact"
@@ -164,7 +164,7 @@
 			/>
 	  </v-row>
 
-      <v-virtual-scroll
+      <v-virtual-scroll v-if="displayResults.length > 0"
         :height="300"
         :items="displayResults"
         >
@@ -176,6 +176,15 @@
 					 />
         </template>
       </v-virtual-scroll>
+
+	  <v-row v-if="results.length > 0 && displayResults.length === 0"
+			class="w-33 mx-auto"
+		>
+		<v-alert 
+			text="No results found"
+			class="text-center"
+		/>
+	  </v-row>
     </div>
   </v-container>
 </template>
@@ -225,6 +234,7 @@ watchEffect(() => {
 });
 
 onMounted(() => {
+	preloadAllTechniqueImage();
 	getResults();
 });
 
@@ -270,8 +280,15 @@ function selectResult(uuid: string) {
 
 	if (latestResult.value?.model.uuid === uuid)
 		latestResult.value.selected = !latestResult.value.selected;
-	else
-		latestResult.value!.selected = false;
+	else if (latestResult.value)
+		latestResult.value.selected = false;
+}
+
+function preloadAllTechniqueImage() {
+	Object.values(images).forEach(src => {
+		const img = new Image();
+		img.src = src;
+	});
 }
 
 </script>

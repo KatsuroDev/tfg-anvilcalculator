@@ -4,19 +4,19 @@
           :class="['w-100', 'py-4', 'my-2', {'bg-grey-darken-2': props.isSelected}]"
           :elevation="props.elevation"
           >
-      <v-row class="px-8">
+      <v-row class="px-8" align="center">
         <v-col cols="3" class="d-flex align-center">
           <h2 class="text-h6">{{ model.material }}</h2>
         </v-col>
 
-        <v-col cols="8" class="d-flex align-center">
-          <div v-for="[value, times] in stepCountsEntries" class="d-flex align-center mr-3">
+        <v-col cols="auto me-auto" class="d-flex align-center flex-wrap">
+          <div v-for="[value, times] in stepCountsEntries" class="d-flex align-center mr-3 mb-2">
             <span class="text-h5 font-weight-medium mr-1">{{ times }}x </span>
             <v-avatar size="48" class="mr-2" rounded="0">
 						  <v-img :src="getImage(Techniques.find(x => x.value === value)!.name)" class="pixel-art"/>
 					  </v-avatar>
           </div>
-          <div v-for="step in lastStepCountsEntries" class="d-flex align-center mr-3">
+          <div v-for="step in lastStepCountsEntries" class="d-flex align-center mr-3 mb-2">
             <span class="text-h5 font-weight-medium mr-1">{{ step.times }}x </span>
             <v-avatar size="48" class="mr-2" rounded="0">
 						  <v-img :src="getImage(Techniques.find(x => x.value === step.value)!.name)" class="pixel-art"/>
@@ -24,9 +24,7 @@
           </div>
         </v-col>
 
-        <v-spacer />
-
-        <v-col class="d-flex align-center justify-center">
+        <v-col cols="auto" class="d-flex align-center justify-end">
           <v-btn color="error" icon="mdi-trash-can-outline" @click="onDeleteClick()"/>
         </v-col>
       </v-row>

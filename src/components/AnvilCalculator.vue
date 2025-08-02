@@ -12,11 +12,11 @@
         </v-col>
       </v-row>
       <v-row class="mb-8">
-        <v-col cols="3">
+        <v-col sm="6" md="3">
           <v-text-field v-model="model.material" label="What are you making?" />
         </v-col>
 
-        <v-col cols="2">
+        <v-col sm="6" md="2">
           <v-number-input
             v-model="model.target"
             label="Target"
@@ -27,7 +27,7 @@
           />
         </v-col>
 
-		<v-col cols="2">
+		<v-col sm="3" md="2">
           <v-select
             v-model="model.lastSteps[0]"
             label="Last step"
@@ -63,7 +63,7 @@
 		  </v-select>
         </v-col>
 
-		<v-col cols="2">
+		<v-col sm="4" md="2">
           <v-select
             v-model="model.lastSteps[1]"
             label="Second-to-last step"
@@ -99,7 +99,7 @@
 		  </v-select>
         </v-col>
 
-        <v-col cols="2">
+        <v-col sm="4" md="2">
           <v-select
             v-model="model.lastSteps[2]"
             label="Third-to-last step"

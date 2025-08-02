@@ -249,6 +249,11 @@ function selectResult(uuid: string) {
 		}
 		x.selected = false;
 	});
+
+	if (latestResult.value?.model.uuid === uuid)
+		latestResult.value.selected = !latestResult.value.selected;
+	else
+		latestResult.value!.selected = false;
 }
 
 </script>

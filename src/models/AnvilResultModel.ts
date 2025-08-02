@@ -28,7 +28,6 @@ export default class AnvilResultModel {
   }
 
   calculateSteps(target: number, lastSteps: Array<number | undefined>) {
-
     const lastStepsTotal = lastSteps.reduce((previous, currentValue) => {
         if (previous == undefined)
           return;

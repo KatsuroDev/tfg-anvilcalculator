@@ -71,49 +71,38 @@ const lastSteps = props.model.lastSteps.filter(x => x != undefined).reverse();
 
 const lastIndexTrim = props.model.lastSteps.length !== 0 ? -(props.model.lastSteps.length) : undefined;
 const steps = props.model.steps.slice(0, lastIndexTrim);
-let times = 0;
 
-steps.forEach((step, index) => {
+steps.forEach(step => {
+  stepCounts.value.set(step, (stepCounts.value.get(step) || 0) + 1);
+});
 
-  if (index !== 0)
-  {
-    const previous = props.model.steps[index - 1];
+countLastSteps();
 
-    if (step === previous) times++;
-    else {
-      stepCounts.value.set(previous, times);
-      times = 1;
+function countLastSteps() {
+  if (lastSteps.length === 0) return;
+
+  let current = lastSteps[0];
+  let count = 1;
+
+  if (current == steps[steps.length - 1]) {
+    count += stepCounts.value.get(current) ?? 0;
+    stepCounts.value.delete(current);
+  }
+
+  for (let i = 1; i < lastSteps.length; i++) {
+    const step = lastSteps[i];
+
+    if (step === current) {
+      count++;
+    } else {
+      lastStepCounts.value.push({ value: current, times: count });
+      current = step;
+      count = 1;
     }
   }
 
-  times++;
-
-  if (steps.length === index + 1) {
-    stepCounts.value.set(step, times);
-    times = 0;
-  }
-});
-
-let lastTimes = 0;
-lastSteps.forEach((step, index) => {
-
-  if (index !== 0) {
-    const previous = lastSteps[index - 1];
-
-    if (step === previous) lastTimes++;
-    else {
-      lastStepCounts.value.push({ value: previous, times: lastTimes });
-      lastTimes = 1;
-    }
-  }
-
-  lastTimes++;
-
-  if (lastSteps.length === index + 1) {
-    lastStepCounts.value.push({ value: step, times: lastTimes });
-    lastTimes = 0;
-  }
-});
+  lastStepCounts.value.push({ value: current, times: count });
+}
 
 function onCardClick()
 {

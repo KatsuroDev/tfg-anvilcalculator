@@ -140,7 +140,7 @@
         </v-col>
       </v-row>
 
-	  <div v-if="latestResult != undefined" class="mb-2">
+	  <div v-if="latestResult != undefined" class="mb-5">
 		<v-row class="mb-1">
 			<AnvilResult :model="latestResult.model"
 				:is-selected="latestResult.selected"
@@ -149,7 +149,20 @@
 				@select-result="(selectedResult) => selectResult(selectedResult)"
 				/>
 		</v-row>
+
+		<hr />
 	  </div>
+
+	  <v-row class="w-33">
+		<v-text-field
+			append-inner-icon="mdi-magnify"
+			density="compact"
+			label="Search"
+			single-line
+			variant="solo-filled"
+			v-model="searchString"
+			/>
+	  </v-row>
 
       <v-virtual-scroll
         :height="300"
@@ -168,7 +181,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch, watchEffect } from "vue";
 import AnvilResult from "./AnvilResult.vue";
 import AnvilResultModel from "@/models/AnvilResultModel";
 import AnvilResultRepository from "@/repositories/AnvilResult.repository";
@@ -187,24 +200,29 @@ const results = ref(new Array<AnvilResultModel>());
 
 const displayResults = ref<Array<{model: AnvilResultModel, selected: boolean }>>([]);
 const latestResult = ref<{model: AnvilResultModel, selected: boolean}>();
+const searchString = ref("");
 
-watch(results, (newResults) => {
+watchEffect(() => {
+	const newResults = results.value;
+	const newSearch = searchString.value;
+
 	if (!newResults) return;
 
 	const sorted = newResults
-		.slice()
+		.filter(x => {
+			if (!newSearch)
+				return true;
+			return x!.material.toLowerCase().includes(newSearch.toLowerCase());
+		})
 		.sort((a, b) => {
-			if (a.material == undefined || b.material == undefined)
-				return 0;
-			return a.material.toUpperCase().localeCompare(b.material.toUpperCase());
+			return a.material?.toUpperCase().localeCompare(b.material?.toUpperCase());
 		});
 
 	displayResults.value = sorted.map(x => ({
 		model: x,
 		selected: false
-
 	}));
-}, { immediate: true, deep: true });
+});
 
 onMounted(() => {
 	getResults();

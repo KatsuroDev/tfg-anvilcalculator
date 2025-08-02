@@ -2,6 +2,7 @@
   <v-card @click="onCardClick()"
           link
           :class="['w-100', 'py-4', 'my-2', {'bg-grey-darken-2': props.isSelected}]"
+          :elevation="props.elevation"
           >
       <v-row class="px-8">
         <v-col cols="3" class="d-flex align-center">
@@ -45,6 +46,10 @@ const props = defineProps({
   isSelected: {
     type: Boolean,
     required: false,
+  },
+  elevation: {
+    type: [Number, String],
+    default: 2,
   }
 });
 

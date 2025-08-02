@@ -139,6 +139,18 @@
           <v-btn icon="mdi-plus" @click="createResult"/>
         </v-col>
       </v-row>
+
+	  <div v-if="latestResult != undefined" class="mb-2">
+		<v-row class="mb-1">
+			<AnvilResult :model="latestResult.model"
+				:is-selected="latestResult.selected"
+				elevation="6"
+				@delete-result="deleteLatestResult()"
+				@select-result="(selectedResult) => selectResult(selectedResult)"
+				/>
+		</v-row>
+	  </div>
+
       <v-virtual-scroll
         :height="300"
         :items="displayResults"
@@ -174,13 +186,18 @@ const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());
 
 const displayResults = ref<Array<{model: AnvilResultModel, selected: boolean }>>([]);
+const latestResult = ref<{model: AnvilResultModel, selected: boolean}>();
 
 watch(results, (newResults) => {
 	if (!newResults) return;
 
 	const sorted = newResults
 		.slice()
-		.sort((a, b) => a.material.toUpperCase().localeCompare(b.material.toUpperCase()));
+		.sort((a, b) => {
+			if (a.material == undefined || b.material == undefined)
+				return 0;
+			return a.material.toUpperCase().localeCompare(b.material.toUpperCase());
+		});
 
 	displayResults.value = sorted.map(x => ({
 		model: x,
@@ -203,12 +220,17 @@ function createResult() {
 	const newResult = new AnvilResultModel(model);
 	AnvilResultRepository.save(newResult);
 	results.value.push(newResult);
-	modelReset();
+	latestResult.value = {model: newResult, selected: false};
+	//modelReset();
 }
 
 function deleteResult(uuid: string) {
 	AnvilResultRepository.delete(uuid);
 	results.value = results.value.filter(x => x.uuid !== uuid);
+}
+
+function deleteLatestResult() {
+	latestResult.value = undefined;
 }
 
 function getResults()

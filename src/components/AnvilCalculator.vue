@@ -139,13 +139,18 @@
           <v-btn icon="mdi-plus" @click="createResult"/>
         </v-col>
       </v-row>
-      <v-row v-for="result in displayResults" :key="result.model.uuid">
-        <AnvilResult :model="result.model"
-					 :is-selected="result.selected"
-					 @delete-result="(deletedResult) => deleteResult(deletedResult)" 
-					 @select-result="(selectedResult) => selectResult(selectedResult)" 
+      <v-virtual-scroll
+        :height="300"
+        :items="displayResults"
+        >
+        <template v-slot:default="{ item }">
+          <AnvilResult :model="item.model"
+					 :is-selected="item.selected"
+					 @delete-result="(deletedResult) => deleteResult(deletedResult)"
+					 @select-result="(selectedResult) => selectResult(selectedResult)"
 					 />
-      </v-row>
+        </template>
+      </v-virtual-scroll>
     </div>
   </v-container>
 </template>
@@ -169,7 +174,7 @@ const model = reactive(new MaterialCreateModel());
 const results = ref(new Array<AnvilResultModel>());
 
 const displayResults = ref<Array<{model: AnvilResultModel, selected: boolean }>>([]);
-	
+
 watch(results, (newResults) => {
 	if (!newResults) return;
 

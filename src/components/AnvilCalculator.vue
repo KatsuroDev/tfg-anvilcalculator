@@ -182,7 +182,7 @@ watch(results, (newResults) => {
 		selected: false
 
 	}));
-}, { immediate: true });
+}, { immediate: true, deep: true });
 
 onMounted(() => {
 	getResults();
@@ -203,8 +203,7 @@ function createResult() {
 
 function deleteResult(uuid: string) {
 	AnvilResultRepository.delete(uuid);
-	const index = results.value.findIndex((item: AnvilResultModel) => item.uuid === uuid);
-	results.value.splice(index, 1);
+	results.value = results.value.filter(x => x.uuid !== uuid);
 }
 
 function getResults()

@@ -11,12 +11,13 @@ export default class AnvilResultModel {
   constructor(model: MaterialCreateModel | undefined,
               material: string | undefined = undefined,
               steps: Array<number> | undefined = undefined,
-              lastSteps: Array<number> | undefined = undefined) {
+              lastSteps: Array<number> | undefined = undefined, uuid: string | undefined = undefined) {
     if (model == undefined)
     {
       this.material = material!;
       this.steps = steps!;
       this.lastSteps = lastSteps!;
+      this.uuid = uuid!;
     }
     else
     {
@@ -80,6 +81,6 @@ export default class AnvilResultModel {
 
   static fromJson(obj: any)
   {
-    return new AnvilResultModel(undefined, obj.material, obj.steps, obj.lastSteps);
+    return new AnvilResultModel(undefined, obj.material, obj.steps, obj.lastSteps, obj.uuid);
   }
 }

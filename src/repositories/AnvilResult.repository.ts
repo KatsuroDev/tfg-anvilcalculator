@@ -28,8 +28,7 @@ class AnvilResultRepository {
     const parsed = JSON.parse(rawResults!);
     results = parsed.map((obj: any) => AnvilResultModel.fromJson(obj));
 
-    const index = results.findIndex((item: AnvilResultModel) => item.uuid === uuid);
-	  results.splice(index, 1);
+    results = results.filter(x => x.uuid !== uuid);
 
     localStorage.setItem("anvil-results", JSON.stringify(results));
   }

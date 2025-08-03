@@ -144,6 +144,7 @@
 		<v-row class="mb-1">
 			<AnvilResult :model="latestResult.model"
 				:is-selected="latestResult.selected"
+				:key="latestResultKey"
 				elevation="6"
 				@delete-result="deleteLatestResult()"
 				@select-result="(selectedResult) => selectResult(selectedResult)"
@@ -171,6 +172,7 @@
         <template v-slot:default="{ item }">
           <AnvilResult :model="item.model"
 					 :is-selected="item.selected"
+					 :key="item.model.uuid"
 					 @delete-result="(deletedResult) => deleteResult(deletedResult)"
 					 @select-result="(selectedResult) => selectResult(selectedResult)"
 					 />
@@ -209,6 +211,7 @@ const results = ref(new Array<AnvilResultModel>());
 
 const displayResults = ref<Array<{model: AnvilResultModel, selected: boolean }>>([]);
 const latestResult = ref<{model: AnvilResultModel, selected: boolean}>();
+const latestResultKey = ref(0);
 const searchString = ref("");
 
 watchEffect(() => {
@@ -239,16 +242,16 @@ onMounted(() => {
 });
 
 function modelReset() {
-	model.lastSteps = [undefined, undefined, undefined];
-	model.material = undefined;
-	model.target = undefined;
+	Object.assign(model, new MaterialCreateModel());
 }
 
 function createResult() {
 	const newResult = new AnvilResultModel(model);
+	console.log(newResult);
 	AnvilResultRepository.save(newResult);
 	results.value.push(newResult);
 	latestResult.value = {model: newResult, selected: false};
+	latestResultKey.value++;
 	//modelReset();
 }
 
